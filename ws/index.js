@@ -39,20 +39,24 @@ io.on("connection", (socket) => {
 
     socket.on("move", (user) => {
       socket.broadcast.to("egg").emit("move", user);
-    })
+    });
 
     socket.on("stop", (id) => {
       socket.broadcast.to("egg").emit("stop", id);
-    })  
+    });
 
     socket.on("quit", (id) => {
       removeUserByID(id);
       socket.broadcast.to("egg").emit("quit", id);
     });
+
+    socket.on("delete-egg", (id) => {
+      socket.broadcast.to("egg").emit("delete-egg", id);
+    });
   });
 
   socket.on("disconnect", () => {
-    const user = users.find(item => item._id === socket.id)
+    const user = users.find((item) => item._id === socket.id);
     if (user) {
       socket.broadcast.to("egg").emit("quit", user.id);
       removeUser(socket.id);
